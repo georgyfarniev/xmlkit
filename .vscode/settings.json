@@ -1,0 +1,16 @@
+{
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true
+  },
+
+  "editor.tabSize": 2,
+  "editor.largeFileOptimizations": false,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.semanticHighlighting.enabled": true,
+  "files.eol": "\n",
+  "editor.rulers": [
+    80
+  ]
+}

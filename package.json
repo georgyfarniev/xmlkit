@@ -4,7 +4,8 @@
   "description": "Convenient library for working with XML, including streams support",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "watch": "jest --watch"
   },
   "keywords": [
     "xml",
@@ -20,6 +21,8 @@
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
     "eslint": "^6.8.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "@babel/preset-env": "^7.9.5",
+    "jest": "^25.3.0"
   }
 }
