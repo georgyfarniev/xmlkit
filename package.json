@@ -1,6 +1,6 @@
 {
   "name": "xmlkit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Convenient library for working with XML, including streams support",
   "main": "dist/index.js",
   "scripts": {
@@ -20,6 +20,10 @@
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/georgyfarniev/xmlkit"
+  },
   "author": "Georgy Farniev",
   "license": "ISC",
   "devDependencies": {
