@@ -1,7 +1,7 @@
-import sax from 'sax'
-import { XmlElement } from './xml_element'
 import { Stack } from './util'
+import { XmlElement } from './xml_element'
 import { XmlComment } from "./xml_comment"
+import { XmlSax } from './xml_sax'
 
 export class XmlDocument {
   private readonly stack = new Stack<XmlElement>()
@@ -12,15 +12,15 @@ export class XmlDocument {
   }
 
   private parse(xml: string) {
-    const parser = sax.parser(true)
+    const sax = new XmlSax();
 
-    parser.onopentag = this.beginElement;
-    parser.onclosetag = this.endElement;
-    parser.ontext = this.onText;
-    parser.oncomment = this.onComment;
-    parser.oncdata = this.onCDATA;
+    sax.on('opentag', this.beginElement);
+    sax.on('closetag', this.endElement);
+    sax.on('text', this.onText);
+    sax.on('comment', this.onComment);
+    sax.on('cdata', this.onCDATA);
 
-    parser.write(xml);
+    sax.feed(xml);
 
     this.stack.clear();
   }
