@@ -1,0 +1,24 @@
+env:
+  es6: true
+  node: true
+  jest/globals: true
+extends:
+  - 'eslint:recommended'
+  - 'plugin:@typescript-eslint/recommended'
+  - 'plugin:eslint-plugin-sonarjs/recommended'
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+parserOptions:
+  ecmaVersion: 2018
+  parser: '@typescript-eslint/parser'
+  sourceType: module
+plugins:
+  - jest
+  - 'eslint-plugin-sonarjs'
+  - '@typescript-eslint'
+rules:
+  '@typescript-eslint/member-delimiter-style': off
+  # '@typescript-eslint/interface-name-prefix':
+  #   prefixWithI: always
+
