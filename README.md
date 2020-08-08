@@ -1,4 +1,8 @@
-# xmlkit - tools for xml operations
+# xmlkit - supercharged xml library
+
+<a href="https://www.npmjs.com/package/xmlkit" alt="Downloads">
+  <img src="https://img.shields.io/npm/dm/xmlkit" />
+</a>
 
 Collection of tools for working with XML, including processing of large XML 
 files using stream.
