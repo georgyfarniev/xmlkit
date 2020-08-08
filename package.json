@@ -16,6 +16,10 @@
     "parser",
     "serializer"
   ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
   "author": "Georgy Farniev",
   "license": "ISC",
   "devDependencies": {
