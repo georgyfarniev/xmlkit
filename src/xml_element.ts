@@ -1,5 +1,5 @@
 import { XmlNode, XmlNodeType } from './xml_node'
-import { StringBuilder, Stack } from './util'
+import { Stack } from './util'
 
 interface Attrs {
   [k: string]: string

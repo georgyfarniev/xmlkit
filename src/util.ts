@@ -11,15 +11,3 @@ export class Stack<T = any> {
     return this.data.length ? this.data[this.data.length - 1] : undefined
   }
 }
-
-export class StringBuilder {
-  private readonly chunks: string[] = []
-
-  public clear() { this.chunks.length = 0 }
-  public toString() { return this.chunks.join('') }
-  public append(chunk: string) { this.chunks.push(chunk) }
-  
-  public appendLine(chunk: string, newline = '\n') {
-    this.append(chunk + newline)
-  }
-}

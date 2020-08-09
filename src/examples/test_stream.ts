@@ -1,5 +1,4 @@
 import { Readable } from 'stream'
-import { StringBuilder } from '../util'
 
 /**
  * Class to generate heavy xml payload for testing purposes.
@@ -13,37 +12,24 @@ export class TestStream extends Readable {
   }
 
   public _read() {
-    if (this.index > this.total) {
+    const { index, total } = this
+
+    if (index > total) {
       this.push(null)
       return
     }
 
-    const sb = new StringBuilder()
+    const buf = [
+      index ? '' : '<root>',
+      `<item foo="bar${index}">`,
+      `<node1_${index}>text${index}`,
+      `<subnode${index}>subtext${index}</subnode${index}>`,
+      `</node1_${index}>`,
+      '</item>',
+      index === total ? '</root>' : ''
+    ].join('\n')
 
-    if (this.index === 0) {
-      sb.appendLine('<root>')
-    }
-
-    sb.append(this.getFakeElementForIndex(this.index))
-
-    if (this.index === this.total) {
-      sb.appendLine('</root>')
-    }
-
-    this.push(sb.toString())
+    this.push(buf)
     this.index++
-  }
-
-  private getFakeElementForIndex(index: number) {
-    const sb = new StringBuilder()
-
-    sb.appendLine(`<item foo="bar${index}">`)
-    sb.appendLine(`<node1_${index}>text${index}`)
-    sb.appendLine(`<subnode${index}>subtext${index}</subnode${index}>`)
-    sb.appendLine(`</node1_${index}>`)
-
-    sb.appendLine('</item>')
-
-    return sb.toString()
   }
 }
