@@ -12,17 +12,17 @@ export class XmlDocument {
   }
 
   private parse(xml: string) {
-    const sax = new XmlSax();
+    const sax = new XmlSax()
 
-    sax.on('opentag', this.beginElement);
-    sax.on('closetag', this.endElement);
-    sax.on('text', this.onText);
-    sax.on('comment', this.onComment);
-    sax.on('cdata', this.onCDATA);
+    sax.on('opentag', this.beginElement)
+    sax.on('closetag', this.endElement)
+    sax.on('text', this.onText)
+    sax.on('comment', this.onComment)
+    sax.on('cdata', this.onCDATA)
 
-    sax.feed(xml);
+    sax.feed(xml)
 
-    this.stack.clear();
+    this.stack.clear()
   }
 
   public toString(): string {

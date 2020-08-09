@@ -14,12 +14,12 @@ export interface Tag {
 // Abstraction class to hide sax module behind and allow easy replacement
 export class XmlSax extends EventEmitter {
   constructor(private parser = sax.parser(true)) {
-    super();
+    super()
 
     parser.onopentag = ({ isSelfClosing, name, attributes}) =>
       this.emit('opentag', { name, isSelfClosing, attrs: attributes })
 
-    parser.onclosetag = (name: string) => this.emit('closetag', name);
+    parser.onclosetag = (name: string) => this.emit('closetag', name)
     parser.ontext = (text: string) => this.emit('text', text)
     parser.oncomment = (comment: string) => this.emit('comment', comment)
     parser.oncdata = (cdata: string) => this.emit('cdata', cdata)

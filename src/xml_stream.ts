@@ -13,10 +13,10 @@ export class XmlStream extends Transform {
     super({ objectMode: true, highWaterMark: 1 })
     this.sax = new XmlSax()
 
-    this.sax.on('opentag', this.onopentag);
-    this.sax.on('closetag', this.onclosetag);
-    this.sax.on('text', this.ontext);
-    this.sax.on('cdata', this.oncdata);
+    this.sax.on('opentag', this.beginElement)
+    this.sax.on('closetag', this.endElement)
+    this.sax.on('text', this.onText)
+    this.sax.on('cdata', this.onCDATA)
   }
 
   public async _transform(chunk: any, _enc: any, cb: any) {
@@ -30,7 +30,7 @@ export class XmlStream extends Transform {
       : this.stack.toArray().map((e) => e.name).join('.')
   }
 
-  private onopentag = ({ name, attrs, isSelfClosing }: any) => {
+  private beginElement = ({ name, attrs, isSelfClosing }: any) => {
     const elt = new XmlElement(name, {
       attrs,
       text: undefined,
@@ -47,7 +47,7 @@ export class XmlStream extends Transform {
     this.stack.push(elt)
   }
 
-  private onclosetag = (name: string) => {
+  private endElement = (name: string) => {
     if (
       this.path === this.query &&
       !this.stack.empty &&
@@ -59,14 +59,14 @@ export class XmlStream extends Transform {
     this.stack.pop()
   }
 
-  private ontext = (text: string) => {
+  private onText = (text: string) => {
     // Do not add text if cdata inside
     if (!this.stack.empty && !this.stack.top.cdata) {
       this.stack.top.text = text
     }
   }
 
-  private oncdata = (cdata: string) => {
+  private onCDATA = (cdata: string) => {
     if (!this.stack.empty) {
       this.stack.top.text = cdata
       this.stack.top.cdata = true
