@@ -3,12 +3,27 @@ import { XmlElement } from './xml_element'
 import { XmlComment } from "./xml_comment"
 import { XmlSax } from './xml_sax'
 
+export interface DocumentOptions {
+  version: string
+  encoding: string
+}
+
 export class XmlDocument {
   private readonly stack = new Stack<XmlElement>()
   public root?: XmlElement
 
-  constructor(xml?: string) {
-    if (xml) this.parse(xml)
+  public version = '1.0'
+  public encoding = 'UTF-8'
+
+  constructor(opts?: string | DocumentOptions) {
+    if (!opts) return
+
+    if (typeof opts === 'string') {
+      this.parse(opts)
+    } else {
+      this.version = opts.version
+      this.encoding = opts.encoding
+    }
   }
 
   private parse(xml: string) {
@@ -26,8 +41,8 @@ export class XmlDocument {
   }
 
   public toString(): string {
-    const v = '<?xml version="1.0" encoding="UTF-8"?>'
-    return v + '\n' + this.root.toString()
+    return `<?xml version="${this.version}" encoding="${this.encoding}"?>\n` +
+      this?.root?.toString() ?? ''
   }
 
   //#region handlers

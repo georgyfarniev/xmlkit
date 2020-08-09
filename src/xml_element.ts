@@ -84,59 +84,28 @@ export class XmlElement implements XmlNode {
 
   //#region serialization
   private attributesToString(elt: XmlElement): string {
-    if (!elt.attrs || Object.keys(elt.attrs).length < 1) {
-      return ''
-    }
-
-    const sb = new StringBuilder()
-
-    if (Object.keys(elt.attrs).length > 0) {
-      sb.append(' ')
-    }
-
-    for (const [k, v] of Object.entries(elt.attrs)) {
-      sb.append(`${k}="${v}" `)
-    }
-
-    return sb.toString().trimRight()
+    return Object.entries(elt.attrs || [])
+      .reduce((acc, [k, v]) => acc += `${k}="${v}" `, ' ')
+      .trimRight()
   }
 
   private elementToString(elt: XmlElement, indent = 0) {
     const pad = ' '.repeat(indent)
-
     const attrs = this.attributesToString(elt)
-    const text = elt.text ? elt.text.trim() : ''
 
-    const inputText = (elt.cdata  && text.length > 0)
-      ? `<![CDATA[${text}]]>`
-      : text
+    const text = elt?.text?.trim() ?? ''
+    const body = (elt.cdata && text) ? `<![CDATA[${text}]]>` : text
+    const content = `${pad}<${elt.name}${attrs}`
 
-    if (elt.selfClosing) {
-      return `${pad}<${elt.name}${attrs} />\n`
-    }
+    // Self closing so no content inside
+    if (elt.selfClosing) return `${content} />\n`
 
-    let buf = `${pad}<${elt.name}${attrs}>${inputText}`
+    const nl = elt.childrenLength > 0 ? '\n' : ''
 
-    if (elt.childrenLength > 0) {
-      buf += '\n'
-    }
-
-    for (const child of elt) {
-      const depth = indent + 2
-      if (child.type === XmlNodeType.Element) {
-        buf += this.elementToString(child, depth)
-      } else {
-        buf += child.toString(depth)
-      }
-    }
-
-    if (elt.childrenLength > 0) {
-      buf += pad
-    }
-
-    buf += `</${elt.name}>\n`
-
-    return buf
+    return elt.children.reduce(
+      (acc, curr) => acc += curr.toString(indent + 2),
+      `${content}>${body}${nl}`
+    ) + `</${elt.name}>\n`
   }
 
   public toString(indent = 0) {

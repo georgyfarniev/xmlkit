@@ -12,6 +12,8 @@ async function main() {
     )
     .appendChild(
       new XmlElement('Child2', { attrs: { fiz: 'buz' }, text: 'Text2' })
+    ).appendChild(
+      new XmlElement('Child3', { selfClosing: true })
     )
 
   console.log(doc.toString())
