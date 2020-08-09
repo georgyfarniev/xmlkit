@@ -1,0 +1,22 @@
+import { XmlDocument } from '../xml_document'
+import { XmlElement } from '../xml_element'
+
+async function main() {
+  const doc = new XmlDocument()
+
+  doc.root = new XmlElement('Root')
+
+  doc.root
+    .appendChild(
+      new XmlElement('Child1', { attrs: { foo: 'bar' }, text: 'Text1' })
+    )
+    .appendChild(
+      new XmlElement('Child2', { attrs: { fiz: 'buz' }, text: 'Text2' })
+    )
+
+  console.log(doc.toString())
+}
+
+if (require.main === module) {
+  main()
+}

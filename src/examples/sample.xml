@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root>
+  <Child1 foo="bar">Text</Child1>
+  <Child1>Text</Child1>
+  <Child1>
+    <!-- Comment2! -->
+    <Grandchild1 fiz="buz" foo="123">Text3</Grandchild1>
+    <Grandchild2>Text4</Grandchild2>
+  </Child1>
+</Root>

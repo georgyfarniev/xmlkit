@@ -79,6 +79,7 @@ export class XmlElement implements XmlNode {
 
   public appendChild(child: XmlNode) {
     this.children.push(child)
+    return this
   }
 
   //#region serialization
