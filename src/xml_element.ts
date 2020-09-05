@@ -1,7 +1,8 @@
 import { XmlNode, XmlNodeType } from './xml_node'
 import { Stack } from './util'
+import { XmlSerializer } from './xml_serializer'
 
-interface Attrs {
+export interface Attrs {
   [k: string]: string
 }
 
@@ -83,29 +84,33 @@ export class XmlElement implements XmlNode {
   }
 
   //#region serialization
-  private attributesToString(elt: XmlElement): string {
-    return Object.entries(elt.attrs || [])
-      .reduce((acc, [k, v]) => acc += `${k}="${v}" `, ' ')
-      .trimRight()
-  }
-
   private elementToString(elt: XmlElement, indent = 0) {
-    const pad = ' '.repeat(indent)
-    const attrs = this.attributesToString(elt)
+    const eol = (elt.childrenLength > 0 || elt.selfClosing) ? '\n' : ''
 
-    const text = elt?.text?.trim() ?? ''
-    const body = (elt.cdata && text) ? `<![CDATA[${text}]]>` : text
-    const content = `${pad}<${elt.name}${attrs}`
+    const tag = XmlSerializer.elementStart(elt.name, {
+      attrs: elt.attrs,
+      cdata: elt.cdata,
+      selfClosing: elt.selfClosing,
+      text: elt.text,
+      indent,
+      eol
+    })
 
-    // Self closing so no content inside
-    if (elt.selfClosing) return `${content} />\n`
+    // self-closing tags cannot have content or children
+    if (elt.selfClosing) return tag
 
-    const nl = elt.childrenLength > 0 ? '\n' : ''
+    const content = (elt.cdata && elt.text)
+      ? XmlSerializer.CDATA(elt.text)
+      : elt.text
 
-    return elt.children.reduce(
+    const children = elt.children.reduce(
       (acc, curr) => acc += curr.toString(indent + 2),
-      `${content}>${body}${nl}`
-    ) + `</${elt.name}>\n`
+      ''
+    )
+
+    const end = XmlSerializer.elementEnd(elt.name)
+
+    return `${tag}${children}${content}${end}`
   }
 
   public toString(indent = 0) {
