@@ -4,6 +4,10 @@
   <img src="https://img.shields.io/npm/dm/xmlkit" />
 </a>
 
+<a href="https://www.npmjs.com/package/xmlkit">
+  <img src="https://img.shields.io/npm/v/xmlkit" />
+</a>
+
 Collection of tools for working with XML, including processing of large XML 
 files using stream.
 
