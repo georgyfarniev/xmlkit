@@ -5,7 +5,7 @@
       "type": "node",
       "request": "launch",
       "name": "Debug lib",
-      "program": "${workspaceFolder}/src/index.ts",
+      "program": "${file}",
       "preLaunchTask": "tsc: build - tsconfig.json",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     },

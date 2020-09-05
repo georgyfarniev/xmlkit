@@ -16,8 +16,8 @@ export class XmlSax extends EventEmitter {
   constructor(private parser = sax.parser(true)) {
     super()
 
-    parser.onopentag = ({ isSelfClosing, name, attributes}) =>
-      this.emit('opentag', { name, isSelfClosing, attrs: attributes })
+    parser.onopentag = ({ ns, isSelfClosing, name, attributes}) =>
+      this.emit('opentag', { ns, name, isSelfClosing, attrs: attributes })
 
     parser.onclosetag = (name: string) => this.emit('closetag', name)
     parser.ontext = (text: string) => this.emit('text', text)
