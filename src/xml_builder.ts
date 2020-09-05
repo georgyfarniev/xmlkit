@@ -1,30 +1,35 @@
+import { XmlSerializer } from './xml_serializer'
+import { Stack } from './util'
+
+interface Options {
+  pretty?: boolean
+}
+
 export class XmlBuilder {
-  // private buf = ''
   private chunks: string[] = []
-  private currentElt?: string = null
   private indent = 0
 
   // Indicates whether opening tag is closed (after attributes and other stuff)
   // private isClosed = true
 
+  constructor(private readonly options: Options) {}
 
-  public elt(name: string, attrs: object, self = false) {
-    this.indent += 2
-    const pad = ' '.repeat(this.indent)
+  private elements = new Stack<string>()
 
-    const attrText = Object.entries(attrs || [])
-      .reduce((acc, [k, v]) => acc += `${k}="${v}" `, ' ')
-      .trimRight()
-
-    const cap = self ? ' />' : '>'
-
+  public elt(name: string, attrs: any, self = false) {
     this.chunks.push(
-      `${pad}<${name}${attrText}${cap}`
+      XmlSerializer.elementStart(name, {
+        attrs,
+        selfClosing: self,
+        indent: this.indent,
+        eol: ''
+      })
     )
 
-    if (self) this.indent -= 2
-    else this.currentElt = name
-
+    if (self) return this
+    // this.currentElt = name
+    this.elements.push(name)
+    this.indent += 2
     return this
   }
 
@@ -42,10 +47,15 @@ export class XmlBuilder {
   }
 
   public close() {
-    const pad = ' '.repeat(this.indent)
+    this.chunks.push(
+      XmlSerializer.elementEnd(this.elements.top)
+    )
+    this.elements.pop()
     this.indent -= 2
-    this.chunks.push(`${pad}<${this.currentElt}/>`)
     return this
+  }
+
+  public clear() {
   }
 
   public toString() {
@@ -53,6 +63,6 @@ export class XmlBuilder {
   }
 }
 
-export default function builder() {
-  return new XmlBuilder()
+export default function builder(options?: Options) {
+  return new XmlBuilder(options)
 }
