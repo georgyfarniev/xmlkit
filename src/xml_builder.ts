@@ -27,7 +27,6 @@ export class XmlBuilder {
     )
 
     if (self) return this
-    // this.currentElt = name
     this.elements.push(name)
     this.indent += 2
     return this
@@ -35,14 +34,6 @@ export class XmlBuilder {
 
   public text(text: string) {
     this.chunks.push(text)
-    return this
-  }
-
-  public comment(text: string) {
-    return this
-  }
-
-  public cdata(body: string) {
     return this
   }
 
@@ -56,6 +47,7 @@ export class XmlBuilder {
   }
 
   public clear() {
+    this.chunks = []
   }
 
   public toString() {
