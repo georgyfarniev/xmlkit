@@ -3,27 +3,19 @@ import { XmlElement } from './xml_element'
 import { XmlComment } from "./xml_comment"
 import { XmlSax } from '../xml_sax'
 
-export interface DocumentOptions {
-  version: string
-  encoding: string
-}
-
 export class XmlDocument {
   private readonly stack = new Stack<XmlElement>()
   public root?: XmlElement
 
-  public version = '1.0'
-  public encoding = 'UTF-8'
+  constructor(
+    public version: string = '1.0',
+    public encoding: string = 'UTF-8'
+  ) {}
 
-  constructor(opts?: string | DocumentOptions) {
-    if (!opts) return
-
-    if (typeof opts === 'string') {
-      this.parse(opts)
-    } else {
-      this.version = opts.version
-      this.encoding = opts.encoding
-    }
+  public static createFromString(xml: string) {
+    const doc = new XmlDocument()
+    doc.parse(xml)
+    return doc
   }
 
   private parse(xml: string) {

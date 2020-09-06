@@ -6,7 +6,7 @@ const XML_TEXT = fs.readFileSync(__dirname + '/../../src/examples/sample.xml')
   .toString()
 
 async function main() {
-  const doc = new XmlDocument(XML_TEXT)
+  const doc = XmlDocument.createFromString(XML_TEXT)
 
   // Iterate only elements
   for (const child of doc.root) {
