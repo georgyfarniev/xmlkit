@@ -5,8 +5,13 @@
  */
 
 import { XmlNodeType } from '../common'
+import { XmlElement } from './xml_element'
 
-export interface XmlNode {
-  toString(indent: number): string
-  type: XmlNodeType
+export class XmlNode {
+  toString(indent?: number): string {
+    return 'not implemented'
+  }
+
+  type: XmlNodeType = null
+  public parent: XmlElement = null;
 }

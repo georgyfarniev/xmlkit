@@ -29,7 +29,9 @@ async function main() {
 
   // Querying
   const elt = doc.root.query('Child1.Grandchild1')
+
   console.log(elt.name, elt.text, elt.attrs)
+  console.log(elt.parent.name)
 }
 
 if (require.main === module) {

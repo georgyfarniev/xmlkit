@@ -1,11 +1,13 @@
 import { XmlNode } from './xml_node'
 import { XmlSerializer, XmlNodeType, XmlElementOptions } from '../common'
 
-export class XmlElement implements XmlNode {
+export class XmlElement extends XmlNode {
   public readonly type = XmlNodeType.Element
   private children = new Array<XmlNode>();
 
-  constructor(public name: string, private opts?: XmlElementOptions) { }
+  constructor(public name: string, private opts?: XmlElementOptions) {
+    super()
+  }
 
   //#region data
   public get attrs() {
@@ -58,6 +60,7 @@ export class XmlElement implements XmlNode {
   }
 
   public appendChild(child: XmlNode) {
+    child.parent = this
     this.children.push(child)
     return this
   }
