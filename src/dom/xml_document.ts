@@ -1,4 +1,4 @@
-import { Stack } from '../common/util'
+import { Stack } from '../common'
 import { XmlElement } from './xml_element'
 import { XmlComment } from "./xml_comment"
 import { XmlSax } from '../xml_sax'

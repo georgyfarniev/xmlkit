@@ -1,6 +1,6 @@
 import { XmlSax } from './xml_sax'
 import { XmlElement } from './dom'
-import { Stack } from './common/util'
+import { Stack } from './common'
 import { Transform } from 'stream'
 
 export class XmlStream extends Transform {
@@ -27,7 +27,7 @@ export class XmlStream extends Transform {
   private get path(): string {
     return this.stack.empty
       ? ''
-      : this.stack.toArray().map((e) => e.name).join('.')
+      : this.stack.map((e) => e.name).join('.')
   }
 
   private beginElement = ({ name, attrs, isSelfClosing }: any) => {

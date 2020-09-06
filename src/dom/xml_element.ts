@@ -1,5 +1,5 @@
 import { XmlNode, XmlNodeType } from './xml_node'
-import { Stack } from '../common/util'
+import { Stack } from '../common'
 import { XmlSerializer } from '../common/xml_serializer'
 
 export interface Attrs {
@@ -51,7 +51,7 @@ export class XmlElement implements XmlNode {
     const rfind = (elt: XmlElement): any => {
       stack.push(elt.name)
 
-      if (stack.toArray().join('.') === path) {
+      if (stack.join('.') === path) {
         return elt
       }
 
