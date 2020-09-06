@@ -1,5 +1,5 @@
-import { XmlNode, XmlNodeType } from './xml_node'
-import { XmlSerializer } from '../common'
+import { XmlNode } from './xml_node'
+import { XmlSerializer, XmlNodeType } from '../common'
 
 export class XmlComment implements XmlNode {
   public readonly type = XmlNodeType.Comment

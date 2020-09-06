@@ -1,4 +1,4 @@
-import { Stack } from '../common'
+import { Stack, XmlSerializer } from '../common'
 import { XmlElement } from './xml_element'
 import { XmlComment } from "./xml_comment"
 import { XmlSax } from '../xml_sax'
@@ -41,8 +41,8 @@ export class XmlDocument {
   }
 
   public toString(): string {
-    return `<?xml version="${this.version}" encoding="${this.encoding}"?>\n` +
-      this?.root?.toString() ?? ''
+    const header = XmlSerializer.header(this.version, this.encoding)
+    return `${header}\n${this?.root?.toString() ?? ''}`
   }
 
   //#region handlers

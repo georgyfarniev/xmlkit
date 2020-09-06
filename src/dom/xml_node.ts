@@ -4,12 +4,7 @@
  * element node for convenience.
  */
 
-export const enum XmlNodeType {
-  Element = 'element',
-  Comment = 'comment',
-  PI = 'pi',
-  CDATA = 'cdata'
-}
+import { XmlNodeType } from '../common'
 
 export interface XmlNode {
   toString(indent: number): string

@@ -1,5 +1,5 @@
 // TODO: move generic data types to separate file
-import { Attrs } from '../dom'
+import { Attrs } from '../common'
 
 interface BaseOpts {
   indent?: number

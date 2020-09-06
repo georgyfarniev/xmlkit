@@ -1,16 +1,5 @@
-import { XmlNode, XmlNodeType } from './xml_node'
-import { Stack, XmlSerializer } from '../common'
-
-export interface Attrs {
-  [k: string]: string
-}
-
-export interface XmlElementOptions {
-  attrs?: Attrs
-  text?: string
-  cdata?: boolean
-  selfClosing?: boolean
-}
+import { XmlNode } from './xml_node'
+import { Stack, XmlSerializer, XmlNodeType, XmlElementOptions } from '../common'
 
 export class XmlElement implements XmlNode {
   public readonly type = XmlNodeType.Element
