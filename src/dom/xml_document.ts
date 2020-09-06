@@ -48,7 +48,7 @@ export class XmlDocument {
   //#region handlers
   private beginElement = (tag: any) => {
     const elt = new XmlElement(tag.name, {
-      attrs: tag.attributes,
+      attrs: tag.attrs,
       text: undefined,
       selfClosing: tag.isSelfClosing
     })

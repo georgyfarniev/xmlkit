@@ -135,7 +135,7 @@ export class XmlElement implements XmlNode {
 
   public get childNodes() {
     return {
-      [Symbol.iterator]: () => this.createIterator([XmlNodeType.Element]) as any
+      [Symbol.iterator]: () => this.createIterator() as any
     }
   }
 

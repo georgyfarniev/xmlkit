@@ -2,6 +2,7 @@
 <Root>
   <Child1 foo="bar">Text</Child1>
   <Child1>Text</Child1>
+  <!-- Comment1! -->
   <Child1>
     <!-- Comment2! -->
     <Grandchild1 fiz="buz" foo="123">Text3</Grandchild1>
