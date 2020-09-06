@@ -24,6 +24,12 @@ async function main() {
     if (node.type === XmlNodeType.Element) console.log(node.name)
     else if (node.type === XmlNodeType.Comment) console.log(node.comment)
   }
+
+  console.log('-'.repeat(50))
+
+  // Querying
+  const elt = doc.root.query('Child1.Grandchild1')
+  console.log(elt.name, elt.text, elt.attrs)
 }
 
 if (require.main === module) {
