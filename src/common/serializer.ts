@@ -24,6 +24,14 @@ const DEFAULT_OPTS: BaseOpts = {
  * Stateless XML serialization helper
  */
 export class XmlSerializer {
+  /**
+   * Serialzie closing XML header
+   * @param version version
+   * @param encoding encoding
+   */
+  public static header(version: string, encoding: string) {
+    return `<?xml version="${version}" encoding="${encoding}"?>`
+  }
 
   /**
    * Serialize opening XML tag
@@ -54,6 +62,17 @@ export class XmlSerializer {
     const { indent, indentChar, eol } = {...DEFAULT_OPTS, ...options }
     const pad = indentChar.repeat(indent)
     return `${pad}</${name}>${eol}`
+  }
+
+  /**
+   * Serialzie closing XML comment
+   * @param content content
+   * @param options options
+   */
+  public static comment(content: string, options?: BaseOpts) {
+    const { indent, indentChar, eol } = {...DEFAULT_OPTS, ...options }
+    const pad = indentChar.repeat(indent)
+    return `${pad}<!-- ${content} -->${eol}`
   }
 
   /**

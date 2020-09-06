@@ -1,12 +1,12 @@
 import { XmlNode, XmlNodeType } from './xml_node'
+import { XmlSerializer } from '../common'
 
 export class XmlCDATA implements XmlNode {
   public readonly type = XmlNodeType.CDATA
 
   constructor(public data: string) {}
 
-  public toString(indent = 0) {
-    const pad = ' '.repeat(indent)
-    return `${pad}<![CDATA[${this.data}]]>\n`
+  public toString() {
+    return XmlSerializer.CDATA(this.data)
   }
 }

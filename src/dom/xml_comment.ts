@@ -1,4 +1,5 @@
 import { XmlNode, XmlNodeType } from './xml_node'
+import { XmlSerializer } from '../common'
 
 export class XmlComment implements XmlNode {
   public readonly type = XmlNodeType.Comment
@@ -6,7 +7,6 @@ export class XmlComment implements XmlNode {
   constructor(public comment: string) {}
 
   public toString(indent = 0) {
-    const pad = ' '.repeat(indent)
-    return `${pad}<!-- ${this.comment} -->\n`
+    return XmlSerializer.comment(this.comment, { indent })
   }
 }
