@@ -35,31 +35,22 @@ export class XmlElement implements XmlNode {
 
   public query(path: string): XmlElement {
     const segs: string[] = []
+    const fullPath = `${this.name}.${path.trim()}`
 
-    const rfind = (elt: XmlElement): any => {
+    const rfind = (elt: XmlElement): XmlElement => {
       segs.push(elt.name)
 
-      if (segs.join('.') === path) {
-        return elt
-      }
+      if (segs.join('.') === fullPath) return elt
 
       for (const child of elt) {
         const ret = rfind(child)
-
-        if (ret) {
-          return ret
-        }
+        if (ret) return ret
       }
 
       segs.pop()
     }
 
-    for (const child of this) {
-      const ret = rfind(child)
-      if (ret) {
-        return ret
-      }
-    }
+    return rfind(this)
   }
 
   public get childrenLength() {
