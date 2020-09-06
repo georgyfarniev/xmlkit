@@ -1,5 +1,5 @@
 import { XmlNode } from './xml_node'
-import { Stack, XmlSerializer, XmlNodeType, XmlElementOptions } from '../common'
+import { XmlSerializer, XmlNodeType, XmlElementOptions } from '../common'
 
 export class XmlElement implements XmlNode {
   public readonly type = XmlNodeType.Element
@@ -34,12 +34,12 @@ export class XmlElement implements XmlNode {
   //#endregion
 
   public query(path: string): XmlElement {
-    const stack = new Stack<string>()
+    const segs: string[] = []
 
     const rfind = (elt: XmlElement): any => {
-      stack.push(elt.name)
+      segs.push(elt.name)
 
-      if (stack.toArray().join('.') === path) {
+      if (segs.join('.') === path) {
         return elt
       }
 
@@ -51,7 +51,7 @@ export class XmlElement implements XmlNode {
         }
       }
 
-      stack.pop()
+      segs.pop()
     }
 
     for (const child of this) {
