@@ -1,5 +1,5 @@
 // TODO: move generic data types to separate file
-import { Attrs } from './xml_element'
+import { Attrs } from '../dom'
 
 interface BaseOpts {
   indent?: number
@@ -38,7 +38,7 @@ export class XmlSerializer {
 
       attrs = {},
       selfClosing = false
-    } = {... DEFAULT_OPTS, ...options }
+    } = { ...DEFAULT_OPTS, ...options }
 
     const pad = indentChar.repeat(indent)
     const elt = `${pad}<${name}${this.attributes(attrs)}`

@@ -1,6 +1,6 @@
 import { XmlSax } from './xml_sax'
-import { XmlElement } from './xml_element'
-import { Stack } from './util'
+import { XmlElement } from './dom'
+import { Stack } from './common/util'
 import { Transform } from 'stream'
 
 export class XmlStream extends Transform {

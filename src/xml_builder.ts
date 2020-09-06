@@ -1,5 +1,5 @@
-import { XmlSerializer } from './xml_serializer'
-import { Stack } from './util'
+import { XmlSerializer } from './common/xml_serializer'
+import { Stack } from './common/util'
 
 interface Options {
   pretty?: boolean

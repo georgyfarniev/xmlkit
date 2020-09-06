@@ -22,6 +22,8 @@ Currently WIP, but stable version will be released.
 
 ## TODO:
 1. Namespaces support
-2. Own sax parser implementation
-3. More tests
-4. Better documentation
+2. builder + stream builder
+3. xpath support
+4. Own sax parser implementation
+5. More tests
+6. Better documentation

@@ -1,7 +1,7 @@
-import { Stack } from './util'
+import { Stack } from '../common/util'
 import { XmlElement } from './xml_element'
 import { XmlComment } from "./xml_comment"
-import { XmlSax } from './xml_sax'
+import { XmlSax } from '../xml_sax'
 
 export interface DocumentOptions {
   version: string

@@ -1,4 +1,4 @@
-import { XmlDocument } from '../xml_document'
+import { XmlDocument } from '../dom'
 import fs from 'fs'
 
 const XML_TEXT = fs.readFileSync(__dirname + '/../../src/examples/sample.xml')

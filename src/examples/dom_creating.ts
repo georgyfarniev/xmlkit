@@ -1,5 +1,4 @@
-import { XmlDocument } from '../xml_document'
-import { XmlElement } from '../xml_element'
+import { XmlDocument, XmlElement } from '../dom'
 
 async function main() {
   const doc = new XmlDocument()

@@ -1,6 +1,6 @@
 import { XmlNode, XmlNodeType } from './xml_node'
-import { Stack } from './util'
-import { XmlSerializer } from './xml_serializer'
+import { Stack } from '../common/util'
+import { XmlSerializer } from '../common/xml_serializer'
 
 export interface Attrs {
   [k: string]: string
