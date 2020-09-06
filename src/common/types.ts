@@ -1,4 +1,4 @@
-export const enum XmlNodeType {
+export enum XmlNodeType {
   Element = 'element',
   Comment = 'comment',
   PI = 'pi',

@@ -39,7 +39,7 @@ export class XmlElement implements XmlNode {
     const rfind = (elt: XmlElement): any => {
       stack.push(elt.name)
 
-      if (stack.join('.') === path) {
+      if (stack.toArray().join('.') === path) {
         return elt
       }
 

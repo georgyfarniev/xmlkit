@@ -27,7 +27,7 @@ export class XmlStream extends Transform {
   private get path(): string {
     return this.stack.empty
       ? ''
-      : this.stack.map((e) => e.name).join('.')
+      : this.stack.toArray().map((e) => e.name).join('.')
   }
 
   private beginElement = ({ name, attrs, isSelfClosing }: any) => {
