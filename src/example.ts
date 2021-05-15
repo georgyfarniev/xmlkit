@@ -1,5 +1,5 @@
-import { XmlStream } from '../xml_stream'
-import { TestStream } from './test_stream'
+import { XmlStream } from './stream'
+import { TestStream } from './helpers'
 
 async function main() {
   const stream = new TestStream(5)

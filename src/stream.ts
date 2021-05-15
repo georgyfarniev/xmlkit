@@ -1,3 +1,5 @@
+import { Transform, TransformCallback } from 'stream'
+import { Stack } from './stack'
 import {
   XmlSax,
   XmlTokenType,
@@ -7,16 +9,15 @@ import {
   IXmlCData,
   IXmlComment,
   IXmlText
-} from './xml_sax2'
-import { Stack } from './common'
-import { Transform, TransformCallback } from 'stream'
+} from './parser'
 
 export class XmlStream extends Transform {
+  private chunk = '';
   private readonly sax: XmlSax;
   private readonly stack = new Stack<string>();
 
   constructor(private readonly query: string) {
-    super({ objectMode: true, highWaterMark: 1 })
+    super({ objectMode: true })
     this.sax = new XmlSax()
   }
 
@@ -37,11 +38,12 @@ export class XmlStream extends Transform {
     return `<${tag.name}${attrs}${sc}>`;
   }
 
-  private tokensToChunks(tokens: XmlToken[], query) {
-    let chunk = '';
-    const buf: string[] = [];
+  private get path() {
+    return this.stack.toArray().join('.');
+  }
 
-    const getPath = () => this.stack.toArray().join('.');
+  private tokensToChunks(tokens: XmlToken[], query) {
+    const buf: string[] = [];
 
     for (const token of tokens) {
       switch (token.type) {
@@ -50,23 +52,23 @@ export class XmlStream extends Transform {
 
           this.stack.push(name);
 
-          const path = getPath()
+          const path = this.path
 
           if (path.startsWith(query)) {
-            chunk += this.getOpenTagText(token as IXmlOpenTag);
+            this.chunk += this.getOpenTagText(token as IXmlOpenTag);
           }
 
           break;
         }
         case XmlTokenType.ElementClose: {
           const { name } = token as IXmlCloseTag;
-          const path = getPath();
+          const path = this.path;
 
-          chunk += `</${name}>`
+          this.chunk += `</${name}>`
 
           if (path === query) {
-            buf.push(chunk)
-            chunk = ''
+            buf.push(this.chunk)
+            this.chunk = ''
           }
 
           this.stack.pop()
@@ -74,17 +76,17 @@ export class XmlStream extends Transform {
         }
         case XmlTokenType.Text: {
           const { text } = token as IXmlText;
-          chunk += text.trim()
+          this.chunk += text.trim()
           break;
         }
         case XmlTokenType.Comment: {
           const { text } = token as IXmlComment;
-          chunk +=  `<!-- ${text.trim()} -->`;
+          this.chunk +=  `<!-- ${text.trim()} -->`;
           break;
         }
         case XmlTokenType.CDATA: {
           const { text } = token as IXmlCData;
-          chunk += `<![CDATA[${text}]]>`;
+          this.chunk += `<![CDATA[${text}]]>`;
           break;
         }
       }
