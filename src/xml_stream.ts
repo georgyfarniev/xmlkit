@@ -1,4 +1,13 @@
-import { XmlSax, XmlTokenType, XmlToken, IXmlOpenTag, IXmlCloseTag } from './xml_sax2'
+import {
+  XmlSax,
+  XmlTokenType,
+  XmlToken,
+  IXmlOpenTag,
+  IXmlCloseTag,
+  IXmlCData,
+  IXmlComment,
+  IXmlText
+} from './xml_sax2'
 import { Stack } from './common'
 import { Transform, TransformCallback } from 'stream'
 
@@ -11,8 +20,8 @@ export class XmlStream extends Transform {
     this.sax = new XmlSax()
   }
 
-  public _transform(text: string, _: string, cb: TransformCallback): void {
-    const tokens = this.sax.getTokens(text);
+  public _transform(xml: string, _: string, cb: TransformCallback): void {
+    const tokens = this.sax.getTokens(xml);
     const chunks = this.tokensToChunks(tokens, this.query);
 
     for (const chunk of chunks) this.push(chunk);
@@ -63,15 +72,21 @@ export class XmlStream extends Transform {
           this.stack.pop()
           break;
         }
-        case XmlTokenType.Text:
-          chunk += (token as any).text.trim()
+        case XmlTokenType.Text: {
+          const { text } = token as IXmlText;
+          chunk += text.trim()
           break;
-        case XmlTokenType.Comment:
-          chunk +=  `<!-- ${(token as any).text.trim()} -->`;
+        }
+        case XmlTokenType.Comment: {
+          const { text } = token as IXmlComment;
+          chunk +=  `<!-- ${text.trim()} -->`;
           break;
-        case XmlTokenType.CDATA:
-          chunk += `<![CDATA[${(token as any).text.trim()}]]>`;
+        }
+        case XmlTokenType.CDATA: {
+          const { text } = token as IXmlCData;
+          chunk += `<![CDATA[${text}]]>`;
           break;
+        }
       }
     }
 

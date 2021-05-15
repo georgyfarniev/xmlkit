@@ -1,5 +1,4 @@
 import sax from 'sax'
-import { EventEmitter } from 'events'
 
 export enum XmlTokenType {
   ElementOpen = 'element_open',
@@ -28,27 +27,25 @@ export interface IXmlCloseTag  extends IXmlNode {
   name: string
 }
 
-interface IXmlText  extends IXmlNode {
+export interface IXmlText  extends IXmlNode {
   text: string
 }
 
-interface IXmlCData  extends IXmlNode {
+export interface IXmlCData  extends IXmlNode {
   text: string
 }
 
-interface IXmlComment  extends IXmlNode {
+export interface IXmlComment  extends IXmlNode {
   text: string
 }
 
 export type XmlToken = IXmlOpenTag | IXmlCloseTag | IXmlText | IXmlCData | IXmlComment
 
 // Abstraction class to hide sax module behind and allow easy replacement
-export class XmlSax extends EventEmitter {
+export class XmlSax {
   private tokens: XmlToken[] = [];
 
   constructor(private parser = sax.parser(true)) {
-    super()
-
     parser.onopentag = this.beginElement
     parser.onclosetag = this.endElement
     parser.ontext = this.onText
