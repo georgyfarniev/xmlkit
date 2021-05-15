@@ -8,7 +8,7 @@
     "watch": "jest --watch",
     "dev": "tsc -w",
     "build": "tsc",
-    "lint": "eslint src/*.ts"
+    "lint": "eslint src/**/*.ts"
   },
   "keywords": [
     "xml",
