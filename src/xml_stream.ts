@@ -1,11 +1,16 @@
 import { XmlSax } from './xml_sax'
 import { XmlElement } from './dom'
-import { Stack } from './common'
+import { Stack, XmlSerializer } from './common'
 import { Transform } from 'stream'
 
+let c  = 0;
+let o = 0;
+
+
 export class XmlStream extends Transform {
-  public chunk?: XmlElement
-  private buf: any[] = []
+  public chunk?: string
+  private buf: string[] = []
+
   private readonly sax:  XmlSax;
   private readonly stack = new Stack<XmlElement>()
 
@@ -27,32 +32,31 @@ export class XmlStream extends Transform {
   private get path(): string {
     return this.stack.empty
       ? ''
-      : this.stack.toArray().map((e) => e.name).join('.')
+      : this.stack.toArray().join('.')
   }
 
   private beginElement = ({ name, attrs, isSelfClosing }: any) => {
-    const elt = new XmlElement(name, {
-      attrs,
-      text: undefined,
-      selfClosing: isSelfClosing
-    })
+
+    
     const p = this.path + '.' + name
+    // console.log(p)
+
+    // console.log('open: ', name);
 
     if (p === this.query) {
-      this.chunk = elt
+      console.log('inside searching path:', p, c++)
+      this.chunk = XmlSerializer.elementStart(name, { attrs });
     } else if (!this.stack.empty) {
-      this.stack.top.appendChild(elt)
+      this.chunk += XmlSerializer.elementStart(name, { attrs });
     }
 
-    this.stack.push(elt)
+    this.stack.push(name)
   }
 
   private endElement = (name: string) => {
-    if (
-      this.path === this.query &&
-      !this.stack.empty &&
-      name === this.stack.top.name
-    ) {
+    this.chunk += XmlSerializer.elementEnd(name);
+
+    if (this.path === this.query) {
       this.buf.push(this.chunk)
     }
 
@@ -60,17 +64,11 @@ export class XmlStream extends Transform {
   }
 
   private onText = (text: string) => {
-    // Do not add text if cdata inside
-    if (!this.stack.empty && !this.stack.top.cdata) {
-      this.stack.top.text = text
-    }
+    this.chunk += text;
   }
 
   private onCDATA = (cdata: string) => {
-    if (!this.stack.empty) {
-      this.stack.top.text = cdata
-      this.stack.top.cdata = true
-    }
+    this.chunk += XmlSerializer.CDATA(cdata);
   }
 
   public getNodes(data: string) {

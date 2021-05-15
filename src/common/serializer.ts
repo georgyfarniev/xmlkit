@@ -49,8 +49,8 @@ export class XmlSerializer {
     } = { ...DEFAULT_OPTS, ...options }
 
     const pad = indentChar.repeat(indent)
-    const elt = `${pad}<${name}${this.attributes(attrs)}`
-    return selfClosing ? `${elt} />${eol}` : `${elt}>${eol}`
+    const elt = `<${name}${this.attributes(attrs)}`
+    return selfClosing ? `${elt} />` : `${elt}>`
   }
 
   /**
@@ -59,9 +59,7 @@ export class XmlSerializer {
    * @param options options
    */
   public static elementEnd(name: string, options?: BaseOpts) {
-    const { indent, indentChar, eol } = {...DEFAULT_OPTS, ...options }
-    const pad = indentChar.repeat(indent)
-    return `${pad}</${name}>${eol}`
+    return `</${name}>`
   }
 
   /**

@@ -47,6 +47,8 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "sax": "^1.2.4"
+    "@types/xmldoc": "^1.1.5",
+    "sax": "^1.2.4",
+    "xmldoc": "^1.1.2"
   }
 }
