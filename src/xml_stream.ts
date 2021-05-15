@@ -1,18 +1,13 @@
 import { XmlSax } from './xml_sax'
-import { XmlElement } from './dom'
 import { Stack, XmlSerializer } from './common'
 import { Transform } from 'stream'
 
-let c  = 0;
-let o = 0;
-
-
 export class XmlStream extends Transform {
-  public chunk?: string
+  public chunk?: string = ''
   private buf: string[] = []
 
   private readonly sax:  XmlSax;
-  private readonly stack = new Stack<XmlElement>()
+  private readonly stack = new Stack<string>()
 
   constructor(private readonly query: string) {
     super({ objectMode: true, highWaterMark: 1 })
@@ -24,7 +19,7 @@ export class XmlStream extends Transform {
     this.sax.on('cdata', this.onCDATA)
   }
 
-  public async _transform(chunk: any, _enc: any, cb: any) {
+  public _transform(chunk: any, _enc: any, cb: any): void {
     for (const item of this.getNodes(chunk)) this.push(item)
     cb()
   }
@@ -36,19 +31,13 @@ export class XmlStream extends Transform {
   }
 
   private beginElement = ({ name, attrs, isSelfClosing }: any) => {
-
-    
     const p = this.path + '.' + name
-    // console.log(p)
+    const s = XmlSerializer.elementStart(name, {
+      attrs,
+      selfClosing: isSelfClosing
+    });
 
-    // console.log('open: ', name);
-
-    if (p === this.query) {
-      console.log('inside searching path:', p, c++)
-      this.chunk = XmlSerializer.elementStart(name, { attrs });
-    } else if (!this.stack.empty) {
-      this.chunk += XmlSerializer.elementStart(name, { attrs });
-    }
+    if (p.startsWith(this.query)) this.chunk += s;
 
     this.stack.push(name)
   }
@@ -58,6 +47,7 @@ export class XmlStream extends Transform {
 
     if (this.path === this.query) {
       this.buf.push(this.chunk)
+      this.chunk = ''
     }
 
     this.stack.pop()
@@ -71,7 +61,7 @@ export class XmlStream extends Transform {
     this.chunk += XmlSerializer.CDATA(cdata);
   }
 
-  public getNodes(data: string) {
+  public getNodes(data: string): string[] {
     this.buf = []
     this.sax.feed(data)
     return this.buf
