@@ -1,4 +1,5 @@
 import sax from 'sax'
+import type { Tag } from 'sax';
 
 export enum XmlTokenType {
   ElementOpen = 'element_open',
@@ -54,7 +55,8 @@ export class XmlSax {
   }
 
   //#region  handlers
-  private beginElement = ({ name, attributes, isSelfClosing }: any) => {
+  private beginElement = (tag: Tag) => {
+    const { name, attributes, isSelfClosing } = tag;
     const tok: IXmlOpenTag = {
       name,
       attrs: attributes,
@@ -100,7 +102,6 @@ export class XmlSax {
 
     this.tokens.push(tok);
   }
-
   //#endregion
 
   public getTokens(chunk: string): XmlToken[] {
