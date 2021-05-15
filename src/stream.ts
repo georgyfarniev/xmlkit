@@ -76,12 +76,12 @@ export class XmlStream extends Transform {
         }
         case XmlTokenType.Text: {
           const { text } = token as IXmlText;
-          this.chunk += text.trim()
+          this.chunk += text
           break;
         }
         case XmlTokenType.Comment: {
           const { text } = token as IXmlComment;
-          this.chunk +=  `<!-- ${text.trim()} -->`;
+          this.chunk +=  `<!-- ${text} -->`;
           break;
         }
         case XmlTokenType.CDATA: {
