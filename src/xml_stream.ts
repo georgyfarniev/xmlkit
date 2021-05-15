@@ -1,6 +1,6 @@
 import { XmlSax } from './xml_sax'
-import { Stack, XmlSerializer } from './common'
-import { Transform } from 'stream'
+import { Stack } from './common'
+import { Transform, TransformCallback } from 'stream'
 
 export class XmlStream extends Transform {
   public chunk?: string = ''
@@ -17,9 +17,10 @@ export class XmlStream extends Transform {
     this.sax.on('closetag', this.endElement)
     this.sax.on('text', this.onText)
     this.sax.on('cdata', this.onCDATA)
+    this.sax.on('comment', this.onComment)
   }
 
-  public _transform(chunk: any, _enc: any, cb: any): void {
+  public _transform(chunk: string, _: string, cb: TransformCallback): void {
     for (const item of this.getNodes(chunk)) this.push(item)
     cb()
   }
@@ -32,10 +33,12 @@ export class XmlStream extends Transform {
 
   private beginElement = ({ name, attrs, isSelfClosing }: any) => {
     const p = this.path + '.' + name
-    const s = XmlSerializer.elementStart(name, {
-      attrs,
-      selfClosing: isSelfClosing
-    });
+    const attrss = Object.entries(attrs || [])
+      .reduce((acc, [k, v]) => `${acc}${k}="${v}" `, ' ')
+      .trimRight()
+
+    const sc = isSelfClosing ? '/' : ''
+    const s = `<${name}${attrss}${sc}>`
 
     if (p.startsWith(this.query)) this.chunk += s;
 
@@ -43,7 +46,7 @@ export class XmlStream extends Transform {
   }
 
   private endElement = (name: string) => {
-    this.chunk += XmlSerializer.elementEnd(name);
+    this.chunk += `</${name}>`
 
     if (this.path === this.query) {
       this.buf.push(this.chunk)
@@ -54,11 +57,15 @@ export class XmlStream extends Transform {
   }
 
   private onText = (text: string) => {
-    this.chunk += text;
+    this.chunk += text.trim();
   }
 
-  private onCDATA = (cdata: string) => {
-    this.chunk += XmlSerializer.CDATA(cdata);
+  private onCDATA = (text: string) => {
+    this.chunk += `<![CDATA[${text}]]>`;
+  }
+
+  private onComment = (text: string) => {
+    this.chunk += `<!-- ${text} -->`;
   }
 
   public getNodes(data: string): string[] {

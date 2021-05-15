@@ -16,8 +16,8 @@ async function main() {
     // doc.
 
     console.log('chunk -------------:\n')
-    console.log(chunk)
-    // console.log(doc.toStringWithIndent('  '));
+    // console.log(chunk)
+    console.log(chunk);
   }
 }
 
