@@ -4,6 +4,7 @@ import { Transform, TransformCallback } from 'stream'
 
 export class XmlStream extends Transform {
   private readonly sax: XmlSax;
+  private readonly stack = new Stack<string>();
 
   constructor(private readonly query: string) {
     super({ objectMode: true, highWaterMark: 1 })
@@ -11,52 +12,46 @@ export class XmlStream extends Transform {
   }
 
   public _transform(text: string, _: string, cb: TransformCallback): void {
-    // for (const item of this.getNodes(chunk)) this.push(item)
-
     const tokens = this.sax.getTokens(text);
     const chunks = this.tokensToChunks(tokens, this.query);
 
-    // console.dir(tokens)
+    for (const chunk of chunks) this.push(chunk);
+    cb();
+  }
 
-    for (const chunk of chunks) {
-      this.push(chunk)
-    }
+  private getOpenTagText(tag: IXmlOpenTag) {
+    const attrs = Object.entries(tag.attrs || [])
+      .reduce((acc, [k, v]) => `${acc}${k}="${v}" `, ' ')
+      .trimRight();
 
-    cb()
+    const sc = tag.selfClosing ? '/' : '';
+    return `<${tag.name}${attrs}${sc}>`;
   }
 
   private tokensToChunks(tokens: XmlToken[], query) {
     let chunk = '';
     const buf: string[] = [];
-    const stack = new Stack<string>();
+
+    const getPath = () => this.stack.toArray().join('.');
 
     for (const token of tokens) {
-      const path = stack.toArray().join('.');
-
       switch (token.type) {
         case XmlTokenType.ElementOpen: {
-          const { name, attrs, selfClosing } = token as IXmlOpenTag;
+          const { name } = token as IXmlOpenTag;
 
-          const attrss = Object.entries(attrs || [])
-            .reduce((acc, [k, v]) => `${acc}${k}="${v}" `, ' ')
-            .trimRight()
+          this.stack.push(name);
 
-          const sc = selfClosing ? '/' : ''
-          const s = `<${name}${attrss}${sc}>`
+          const path = getPath()
 
-          const p = path + '.' + name
-
-          console.log(p)
-
-          if (p.startsWith(query)) chunk += s;
-
-          console.log('pushing', name)
-          stack.push(name)
+          if (path.startsWith(query)) {
+            chunk += this.getOpenTagText(token as IXmlOpenTag);
+          }
 
           break;
         }
         case XmlTokenType.ElementClose: {
           const { name } = token as IXmlCloseTag;
+          const path = getPath();
 
           chunk += `</${name}>`
 
@@ -65,20 +60,18 @@ export class XmlStream extends Transform {
             chunk = ''
           }
 
-          console.log('closing at', path, stack.toArray())
-
-          stack.pop()
+          this.stack.pop()
           break;
         }
-        // case XmlTokenType.Text:
-        //   chunk += (token as any).text.trim()
-        //   break;
-        // case XmlTokenType.Comment:
-        //   chunk +=  `<!-- ${(token as any).text.trim()} -->`;
-        //   break;
-        // case XmlTokenType.CDATA:
-        //   chunk += `<![CDATA[${(token as any).text.trim()}]]>`;
-        //   break;
+        case XmlTokenType.Text:
+          chunk += (token as any).text.trim()
+          break;
+        case XmlTokenType.Comment:
+          chunk +=  `<!-- ${(token as any).text.trim()} -->`;
+          break;
+        case XmlTokenType.CDATA:
+          chunk += `<![CDATA[${(token as any).text.trim()}]]>`;
+          break;
       }
     }
 

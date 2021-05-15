@@ -9,7 +9,7 @@ async function main() {
   for await (const chunk of xml) {
     // console.log(item.attrs.foo)
 
-    const doc = new XmlDoc.XmlDocument(chunk);
+    // const doc = new XmlDoc.XmlDocument(chunk);
     // const doc = new XmlDoc(chunk);
 
 
