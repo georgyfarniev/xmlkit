@@ -1,49 +1,19 @@
 import sax from 'sax'
 import type { Tag } from 'sax';
+import {
+  IXmlCData,
+  IXmlCloseTag,
+  IXmlComment,
+  IXmlOpenTag,
+  IXmlText,
+  XmlToken,
+  XmlTokenType,
+  BaseParser
+} from './types';
 
-export enum XmlTokenType {
-  ElementOpen = 'element_open',
-  ElementClose = 'element_close',
-  Text = 'text',
-  Comment = 'comment',
-  PI = 'pi',
-  CDATA = 'cdata'
-}
-
-export interface Attrs {
-  [k: string]: string
-}
-
-interface IXmlNode {
-  type: XmlTokenType
-}
-
-export interface IXmlOpenTag extends IXmlNode {
-  name: string
-  attrs: Attrs
-  selfClosing: boolean
-}
-
-export interface IXmlCloseTag  extends IXmlNode {
-  name: string
-}
-
-export interface IXmlText  extends IXmlNode {
-  text: string
-}
-
-export interface IXmlCData  extends IXmlNode {
-  text: string
-}
-
-export interface IXmlComment  extends IXmlNode {
-  text: string
-}
-
-export type XmlToken = IXmlOpenTag | IXmlCloseTag | IXmlText | IXmlCData | IXmlComment
 
 // Abstraction class to hide sax module behind and allow easy replacement
-export class XmlSax {
+export class XmlSaxParser implements BaseParser {
   private tokens: XmlToken[] = [];
 
   constructor(private parser = sax.parser(true)) {
@@ -53,12 +23,12 @@ export class XmlSax {
     parser.oncomment = this.onComment
     parser.oncdata = this.onCDATA
   }
-
+ 
   //#region  handlers
   private beginElement = (tag: Tag) => {
     const { name, attributes, isSelfClosing } = tag;
     const tok: IXmlOpenTag = {
-      name,
+      name, 
       attrs: attributes,
       selfClosing: isSelfClosing,
       type: XmlTokenType.ElementOpen
@@ -68,39 +38,31 @@ export class XmlSax {
   }
 
   private endElement = (name: string) => {
-    const tok: IXmlCloseTag = {
+    this.tokens.push({
       name,
       type: XmlTokenType.ElementClose
-    };
-
-    this.tokens.push(tok);
+    } as IXmlCloseTag);
   }
 
   private onText = (text: string) => {
-    const tok: IXmlText = {
+    this.tokens.push({
       text,
       type: XmlTokenType.Text
-    };
-
-    this.tokens.push(tok);
+    } as IXmlText);
   }
 
   private onCDATA = (text: string) => {
-    const tok: IXmlCData = {
+    this.tokens.push({
       text,
       type: XmlTokenType.CDATA
-    };
-
-    this.tokens.push(tok);
+    } as IXmlCData);
   }
 
   private onComment = (text: string) => {
-    const tok: IXmlComment = {
+    this.tokens.push({
       text,
       type: XmlTokenType.Comment
-    };
-
-    this.tokens.push(tok);
+    } as IXmlComment);
   }
   //#endregion
 

@@ -1,7 +1,7 @@
 import { Transform, TransformCallback } from 'stream'
+import { XmlSaxParser } from './parser';
 import { Stack } from './stack'
 import {
-  XmlSax,
   XmlTokenType,
   XmlToken,
   IXmlOpenTag,
@@ -9,16 +9,15 @@ import {
   IXmlCData,
   IXmlComment,
   IXmlText
-} from './parser'
+} from './types'
 
 export class XmlStream extends Transform {
   private chunk = '';
-  private readonly sax: XmlSax;
+  private readonly sax: XmlSaxParser = new XmlSaxParser()
   private readonly stack = new Stack<string>();
 
   constructor(private readonly query: string) {
     super({ objectMode: true })
-    this.sax = new XmlSax()
   }
 
   public _transform(xml: string, _: string, cb: TransformCallback): void {
