@@ -3,6 +3,7 @@
   "version": "0.1.2",
   "description": "Convenient library for working with XML, including streams support",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "watch": "jest --watch",
