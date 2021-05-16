@@ -1,5 +1,6 @@
 import { Transform, TransformCallback } from 'stream'
 import { XmlSaxParser } from './parser';
+import { XmlSerializer } from './serializer';
 import { Stack } from './stack'
 import {
   XmlTokenType,
@@ -28,15 +29,6 @@ export class XmlStream extends Transform {
     cb();
   }
 
-  private getOpenTagText(tag: IXmlOpenTag) {
-    const attrs = Object.entries(tag.attrs || [])
-      .reduce((acc, [k, v]) => `${acc}${k}="${v}" `, ' ')
-      .trimRight();
-
-    const sc = tag.selfClosing ? '/' : '';
-    return `<${tag.name}${attrs}${sc}>`;
-  }
-
   private get path() {
     return this.stack.toArray().join('.');
   }
@@ -54,7 +46,8 @@ export class XmlStream extends Transform {
           const path = this.path
 
           if (path.startsWith(query)) {
-            this.chunk += this.getOpenTagText(token as IXmlOpenTag);
+            const { name, attrs, selfClosing } = token as IXmlOpenTag
+            this.chunk += XmlSerializer.openTag(name, attrs, selfClosing);
           }
 
           break;
@@ -63,7 +56,7 @@ export class XmlStream extends Transform {
           const { name } = token as IXmlCloseTag;
           const path = this.path;
 
-          this.chunk += `</${name}>`
+          this.chunk += XmlSerializer.closeTag(name);
 
           if (path === query) {
             buf.push(this.chunk)
@@ -75,17 +68,17 @@ export class XmlStream extends Transform {
         }
         case XmlTokenType.Text: {
           const { text } = token as IXmlText;
-          this.chunk += text
+          this.chunk += XmlSerializer.text(text);
           break;
         }
         case XmlTokenType.Comment: {
           const { text } = token as IXmlComment;
-          this.chunk +=  `<!-- ${text} -->`;
+          this.chunk +=  XmlSerializer.comment(text);
           break;
         }
         case XmlTokenType.CDATA: {
           const { text } = token as IXmlCData;
-          this.chunk += `<![CDATA[${text}]]>`;
+          this.chunk += XmlSerializer.CDATA(text);
           break;
         }
       }
