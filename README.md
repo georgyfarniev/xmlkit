@@ -1,4 +1,4 @@
-# xmlkit - xml stream parser
+# xmlkit - xml tools
 <a href="https://www.npmjs.com/package/xmlkit" alt="Downloads">
   <img src="https://img.shields.io/npm/dm/xmlkit" />
 </a>

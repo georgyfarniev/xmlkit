@@ -1,7 +1,7 @@
 {
   "name": "xmlkit",
   "version": "1.0.0",
-  "description": "Convenient library for working with XML, including streams support",
+  "description": "xml tools",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
