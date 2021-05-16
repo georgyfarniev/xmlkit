@@ -11,7 +11,7 @@ export class TestStream extends Readable {
     super()
   }
 
-  public _read() {
+  public _read(): void {
     const { index, total } = this
 
     if (index > total) {
