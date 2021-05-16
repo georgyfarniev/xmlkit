@@ -1,7 +1,11 @@
 import { Attrs } from './types';
 
 export class XmlSerializer {
-  public static openTag(name: string, attrs: Attrs,selfClosing = false): string {
+  public static openTag(
+    name: string,
+    attrs: Attrs = {},
+    selfClosing = false
+  ): string {
     const aStr = Object.entries(attrs || [])
       .reduce((acc, [k, v]) => `${acc}${k}="${v}" `, ' ')
       .trimRight();
