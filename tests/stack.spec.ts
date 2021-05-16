@@ -1,5 +1,5 @@
 import 'jest'
-import { Stack } from '../src/common'
+import { Stack } from '../src/stack'
 
 describe('Stack', () => {
   test('general', async () => {
