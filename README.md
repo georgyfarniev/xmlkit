@@ -75,15 +75,16 @@ const { XmlStream } = require('xmlkit');
 
 ##### XmlStream.constructor(selector: string)
 A constructor that creates parser instance.
-Takes a string specifying selector for extracting elements in dot notation,
-example: `root.elt`. ONLY this simple format is supported, this is NOT an XPath.
-Also, you must specify only XML element names divided by dots, no attributes
-selector supported
+Takes a string specifying selector for extracting elements in dot notation as a
+first parameter, example: `root.elt`. **root** and **elt** is an en element name
+ONLY this, simple format is supported, this is NOT an XPath, so only element
+selectors is supported.
 
 ##### XmlStream.on('data', (chunk: string))
 Event emitted for each of the extracted nodes specified by selector passed in
-constructor. It's just a string containing XML data of the needed element, so
-you can use any 3rd party XML parser to further process it.
+constructor. Chunk is just a string containing XML data of the needed element,
+which enables you to use any of your favorite XML parser to further process the
+chunk.
 
 ## Afterwords
 Working with XML is pain in NodeJS, so if this package gains any substantil amount
