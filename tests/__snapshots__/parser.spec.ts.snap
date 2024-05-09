@@ -1,42 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`XmlSaxParser complex 1`] = `
-Array [
-  Object {
-    "attrs": Object {},
+[
+  {
+    "attrs": {},
     "name": "root",
     "selfClosing": false,
     "type": "element_open",
   },
-  Object {
-    "attrs": Object {
+  {
+    "attrs": {
       "foo": "bar",
     },
     "name": "element",
     "selfClosing": false,
     "type": "element_open",
   },
-  Object {
+  {
     "text": "text",
     "type": "text",
   },
-  Object {
-    "attrs": Object {
+  {
+    "attrs": {
       "fiz": "buzz",
     },
     "name": "inner",
     "selfClosing": true,
     "type": "element_open",
   },
-  Object {
+  {
     "name": "inner",
     "type": "element_close",
   },
-  Object {
+  {
     "name": "element",
     "type": "element_close",
   },
-  Object {
+  {
     "name": "root",
     "type": "element_close",
   },
@@ -44,28 +44,28 @@ Array [
 `;
 
 exports[`XmlSaxParser simple 1`] = `
-Array [
-  Object {
-    "attrs": Object {},
+[
+  {
+    "attrs": {},
     "name": "root",
     "selfClosing": false,
     "type": "element_open",
   },
-  Object {
-    "attrs": Object {},
+  {
+    "attrs": {},
     "name": "element",
     "selfClosing": false,
     "type": "element_open",
   },
-  Object {
+  {
     "text": "text",
     "type": "text",
   },
-  Object {
+  {
     "name": "element",
     "type": "element_close",
   },
-  Object {
+  {
     "name": "root",
     "type": "element_close",
   },
