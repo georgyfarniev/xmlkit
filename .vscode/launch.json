@@ -10,20 +10,14 @@
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     },
     {
+      "command": "npm run test",
       "name": "Debug tests",
-      "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      }
+      "type": "node-terminal",
     },
     {
       "command": "npm run test -- --runTestsByPath ${relativeFile}",
-      "name": "Run npm run test CURRENT_FILE",
+      "name": "Debug specific test",
       "request": "launch",
       "type": "node-terminal",
     },
