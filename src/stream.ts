@@ -55,23 +55,27 @@ export class XmlStream extends Transform {
           break;
         }
         case XmlTokenType.ElementClose: {
-          if (isSelfClosing) {
-            isSelfClosing = false;
-            this.stack.pop()
-            break;
-          }
-
           const { name } = token as IXmlCloseTag;
           const path = this.path;
 
-          this.chunk += XmlSerializer.closeTag(name);
+          const flush = () => {
+            if (path === query) {
+              buf.push(this.chunk)
+              this.chunk = ''
+            }
 
-          if (path === query) {
-            buf.push(this.chunk)
-            this.chunk = ''
+            this.stack.pop()
           }
 
-          this.stack.pop()
+          if (isSelfClosing) {
+            isSelfClosing = false;
+            flush()
+            break;
+          }
+
+          this.chunk += XmlSerializer.closeTag(name);
+
+          flush()
           break;
         }
         case XmlTokenType.Text: {

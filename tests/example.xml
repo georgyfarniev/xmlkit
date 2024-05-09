@@ -10,7 +10,6 @@
           <empty></empty>
           <self_closing/>
       </item>
-
       <item foo="bar">
         <key>
           value two
@@ -22,7 +21,16 @@
         <![CDATA[<sender>John Smith</sender>]]>
         <self_closing tar="mar"/>
     </item>
-
-
+    <item>
+      <key>
+        value two
+      </key>
+    </item>
+    <item></item>
+    <item foo="bar" />
+    <item />
+    <!-- Should be completely ignored -->
+    <item2 />
+    <item2></item2>
   </example>
 </root>

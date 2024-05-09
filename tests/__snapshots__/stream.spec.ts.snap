@@ -13,7 +13,6 @@ exports[`XmlStream complex example including self-closing elements 1`] = `
           <empty></empty>
           <self_closing/>
       </item>
-
       <item foo="bar">
         <key>
           value two
@@ -24,5 +23,13 @@ exports[`XmlStream complex example including self-closing elements 1`] = `
         <empty fizz="1"  buzz="2"></empty>
         <![CDATA[<sender>John Smith</sender>]]>
         <self_closing tar="mar"/>
-    </item>"
+    </item>
+    <item>
+      <key>
+        value two
+      </key>
+    </item>
+    <item></item>
+    <item foo="bar"/>
+    <item/>"
 `;
