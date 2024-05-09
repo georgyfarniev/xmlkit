@@ -25,7 +25,7 @@ or something else directly
 1. Based on NodeJS Transform stream, so easy to use with existing solutions
 2. Stream emits chunks of text containing XML definition of the queried element
 3. Extremely simple, so you can use your favorite xml library to parse each element,
- such as [xmldoc](https://github.com/nfarina/xmldoc) or [xmldoc](https://github.com/Leonidas-from-XIV/node-xml2js)
+ such as [xmldoc](https://github.com/nfarina/xmldoc) or [node-xml2js](https://github.com/Leonidas-from-XIV/node-xml2js)
 4. Only one external dependency without nested dependencies - [sax](https://github.com/isaacs/sax-js)
 5. Typescript types out of the box
 
