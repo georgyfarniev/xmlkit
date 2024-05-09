@@ -1,0 +1,28 @@
+<root>
+  <example>
+      <item>
+          <key>value one</key>
+          <empty></empty>
+          <self_closing/>
+      </item>
+      <item>
+          <key>value two</key>
+          <empty></empty>
+          <self_closing/>
+      </item>
+
+      <item foo="bar">
+        <key>
+          value two
+        </key>
+        <text>
+        </text>
+        <!-- Some comment -->
+        <empty fizz="1" buzz="2"></empty>
+        <![CDATA[<sender>John Smith</sender>]]>
+        <self_closing tar="mar"/>
+    </item>
+
+
+  </example>
+</root>

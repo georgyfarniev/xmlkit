@@ -20,6 +20,12 @@
       "windows": {
         "program": "${workspaceFolder}/node_modules/jest/bin/jest",
       }
-    }
+    },
+    {
+      "command": "npm run test -- --runTestsByPath ${relativeFile}",
+      "name": "Run npm run test CURRENT_FILE",
+      "request": "launch",
+      "type": "node-terminal",
+    },
   ]
 }
