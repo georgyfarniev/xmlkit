@@ -35,6 +35,7 @@ export class XmlStream extends Transform {
 
   private tokensToChunks(tokens: XmlToken[], query) {
     const buf: string[] = [];
+    let isSelfClosing: boolean = false;
 
     for (const token of tokens) {
       switch (token.type) {
@@ -48,6 +49,7 @@ export class XmlStream extends Transform {
           if (path.startsWith(query)) {
             const { name, attrs, selfClosing } = token as IXmlOpenTag
             this.chunk += XmlSerializer.openTag(name, attrs, selfClosing);
+            isSelfClosing = selfClosing;
           }
 
           break;
@@ -56,14 +58,24 @@ export class XmlStream extends Transform {
           const { name } = token as IXmlCloseTag;
           const path = this.path;
 
-          this.chunk += XmlSerializer.closeTag(name);
+          const flush = () => {
+            if (path === query) {
+              buf.push(this.chunk)
+              this.chunk = ''
+            }
 
-          if (path === query) {
-            buf.push(this.chunk)
-            this.chunk = ''
+            this.stack.pop()
           }
 
-          this.stack.pop()
+          if (isSelfClosing) {
+            isSelfClosing = false;
+            flush()
+            break;
+          }
+
+          this.chunk += XmlSerializer.closeTag(name);
+
+          flush()
           break;
         }
         case XmlTokenType.Text: {

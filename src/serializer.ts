@@ -7,9 +7,8 @@ export class XmlSerializer {
     selfClosing = false
   ): string {
     const aStr = Object.entries(attrs || [])
-      .reduce((acc, [k, v]) => `${acc}${k}="${v}" `, ' ')
-      .trimRight();
-
+      .reduce((acc, [k, v]) => `${acc} ${k}="${v}" `, '')
+      .trimEnd();
     const sc = selfClosing ? '/' : '';
     return `<${name}${aStr}${sc}>`;
   }
