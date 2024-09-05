@@ -22,4 +22,8 @@ describe('XmlStream', () => {
   test('complex example including self-closing elements', async () => {
     await expect(readResult('example.xml', 'root.example.item')).resolves.toMatchSnapshot()
   });
+
+  test('elements unrelated to selector path must not be present', async () => {
+    await expect(readResult('mixedTags.xml', 'root.item')).resolves.toMatchSnapshot()
+  });
 });

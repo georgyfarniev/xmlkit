@@ -1,0 +1,27 @@
+<root>
+  <irrelevant>
+    <caption attr="val">irrelevant caption</caption>
+    <!-- irrelevant comment -->
+    <![CDATA[<tag>irrelevant CDATA</tag>]]>
+  </irrelevant>
+  <item>
+      <key>value one</key>
+      <empty></empty>
+      <self_closing/>
+  </item>
+  <irrelevant2>
+    <caption attr2="val2">irrelevant caption 2</caption>
+    <!-- irrelevant comment 2 -->
+    <![CDATA[<tag>irrelevant CDATA 2</tag>]]>
+  </irrelevant2>
+  <item>
+      <key>value two</key>
+      <empty></empty>
+      <self_closing/>
+  </item>
+  <irrelevant3>
+    <caption attr3="val3">irrelevant caption 3</caption>
+    <!-- irrelevant comment 3 -->
+    <![CDATA[<tag>irrelevant CDATA 3</tag>]]>
+  </irrelevant3>
+</root>

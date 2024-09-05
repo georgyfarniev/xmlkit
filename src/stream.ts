@@ -12,6 +12,12 @@ import {
   IXmlText
 } from './types'
 
+const EXCLUDE_OUTER_NODE_TYPES = [
+  XmlTokenType.Text,
+  XmlTokenType.Comment,
+  XmlTokenType.CDATA
+];
+
 export class XmlStream extends Transform {
   private chunk = '';
   private readonly sax: XmlSaxParser = new XmlSaxParser()
@@ -33,20 +39,26 @@ export class XmlStream extends Transform {
     return this.stack.toArray().join('.');
   }
 
+  private get isInside() {
+    return this.path.startsWith(this.query)
+  }
+
   private tokensToChunks(tokens: XmlToken[], query) {
     const buf: string[] = [];
     let isSelfClosing: boolean = false;
 
     for (const token of tokens) {
+      if (!this.isInside && EXCLUDE_OUTER_NODE_TYPES.includes(token.type)) {
+        continue;
+      }
+
       switch (token.type) {
         case XmlTokenType.ElementOpen: {
           const { name } = token as IXmlOpenTag;
 
           this.stack.push(name);
 
-          const path = this.path
-
-          if (path.startsWith(query)) {
+          if (this.isInside) {
             const { name, attrs, selfClosing } = token as IXmlOpenTag
             this.chunk += XmlSerializer.openTag(name, attrs, selfClosing);
             isSelfClosing = selfClosing;
@@ -73,7 +85,9 @@ export class XmlStream extends Transform {
             break;
           }
 
-          this.chunk += XmlSerializer.closeTag(name);
+          if (this.isInside) {
+            this.chunk += XmlSerializer.closeTag(name);
+          }
 
           flush()
           break;
