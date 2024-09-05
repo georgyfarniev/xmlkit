@@ -86,8 +86,8 @@ export class XmlStream extends Transform {
           }
 
           if (this.isInside) {
-              this.chunk += XmlSerializer.closeTag(name);
-            }
+            this.chunk += XmlSerializer.closeTag(name);
+          }
 
           flush()
           break;
